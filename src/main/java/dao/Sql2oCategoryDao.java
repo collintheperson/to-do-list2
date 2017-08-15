@@ -2,7 +2,7 @@ package dao;
 
 import models.Category;
 import models.Task;
-import org.junit.Test;
+//import org.junit.Test;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;

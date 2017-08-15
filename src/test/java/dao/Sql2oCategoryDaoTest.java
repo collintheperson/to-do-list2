@@ -40,9 +40,11 @@ public class Sql2oCategoryDaoTest {
     @Test
     public void addingCategorySetsId() throws Exception   {
         Category category = new Category("home");
-        int originalCategoryId = category.getId();
         categoryDao.add(category);
-        assertNotEquals(originalCategoryId,category.getId());
+        int originalCategoryId = category.getId();
+        Task task = new Task("shop", originalCategoryId);
+        taskDao.add(task);
+        assertEquals(originalCategoryId, task.getCategoryId());
     }
 
     @Test
@@ -56,11 +58,16 @@ public class Sql2oCategoryDaoTest {
     @Test
     public void getAll_allCategoriesAreFound () throws Exception {
         Category category = new Category("home");
-        Category anotherCategory = new Category("work");
         categoryDao.add(category);
-        categoryDao.add(anotherCategory);
-        int number = categoryDao.getAll().size();
-        assertEquals(2,number );
+        int categoryId = category.getId();
+        Task task = new Task("shop", categoryId);
+        Task anotherTask = new Task("clean", categoryId);
+        taskDao.add(task);
+        taskDao.add(anotherTask);
+        int number = categoryDao.getAllTasksByCategory(categoryId).size();
+        assertTrue(categoryDao.getAllTasksByCategory(categoryId).contains(task));
+        assertTrue(categoryDao.getAllTasksByCategory(categoryId).contains(anotherTask));
+        assertEquals(2, number);
     }
     @Test
     public void getAll_noCategoriesAreFound () throws Exception {
@@ -70,11 +77,15 @@ public class Sql2oCategoryDaoTest {
 
     @Test
     public void update_correctlyUpdates () {
-        Category category = new Category("home");
+        String initialDescription = "Yardwork";
+        Category category = new Category(initialDescription);
         categoryDao.add(category);
-        categoryDao.update(category.getId(),"Home");
+        System.out.println(category);
+        categoryDao.update(category.getId(), "Cleaning");
+        System.out.println(category);
         Category updatedCategory = categoryDao.findById(category.getId());
-        assertEquals("Home",updatedCategory.getName());
+//        System.out.println(categoryDao.findById(category.getId()));
+        assertEquals("Cleaning", updatedCategory.getName());
     }
 
     @Test
