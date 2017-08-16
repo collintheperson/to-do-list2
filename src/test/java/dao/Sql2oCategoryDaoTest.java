@@ -80,11 +80,8 @@ public class Sql2oCategoryDaoTest {
         String initialDescription = "Yardwork";
         Category category = new Category(initialDescription);
         categoryDao.add(category);
-        System.out.println(category);
         categoryDao.update(category.getId(), "Cleaning");
-        System.out.println(category);
         Category updatedCategory = categoryDao.findById(category.getId());
-//        System.out.println(categoryDao.findById(category.getId()));
         assertEquals("Cleaning", updatedCategory.getName());
     }
 
